@@ -8,24 +8,25 @@ switch ($method) {
     case 'GET':
         if (isset($_GET['id'])) {
             $id = intval($_GET['id']);
-            $article = getArticleById($id);
+            $article = getProductsById($id);
             if ($article) {
                 echo json_encode($article);
             } else {
                 echo json_encode(['message' => 'article non trouvée']);
             }
         } else {
-            $articles = getAllArticle();
-            echo json_encode($articlew);
+            $articles = getAllProducts();
+            echo json_encode($articles);
         }
         break;
 
         case 'POST':
-            $nom = $_POST['nom'] ?? null;
-            $prix = $_POST['prix'] ?? null;
+            $name = $_POST['name'] ?? null;
+            $price = $_POST['price'] ?? null;
             $description = $_POST['description'] ?? null;
+            $categorie = $_POST['categorie'] ?? null;
         
-            if ($nom && $prix && $description && isset($_FILES['image'])) {
+            if ($name && $price && $description &&  $categorie && isset($_FILES['image'])) {
                 $image = $_FILES['image'];
         
                 if ($image['error'] === UPLOAD_ERR_OK) {
@@ -36,7 +37,7 @@ switch ($method) {
                     }
         
                     if (move_uploaded_file($image['tmp_name'], $imagePath)) {
-                        $success = AddArticle($nom, $prix, $imagePath, $description);
+                        $success = AddProducts($name, $price, $imagePath, $description,$categorie);
                         if ($success) {
                             echo json_encode(['message' => 'Article créé avec succès']);
                         } else {
@@ -58,3 +59,4 @@ switch ($method) {
     default:
         echo json_encode(['message' => 'Méthode non supportée']);
 }
+
